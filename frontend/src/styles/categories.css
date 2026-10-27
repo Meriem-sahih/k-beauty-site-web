@@ -1,0 +1,210 @@
+/* ==========================================================
+   CATEGORIES PAGE (Categories.jsx)
+
+   <div>                                   ← page (h1 + category blocks)
+     <h1>
+     <div>                                 ← one block per category
+       <h2> <p> <button>
+       <div>                               ← only when opened
+         <ProductCard/>…  or  <p>Aucun produit…</p>
+       </div>
+     </div>
+   </div>
+
+   A category block is recognised by  h2 + p + button  as direct children.
+   (Cart items and product cards have a different order, so no clash.)
+   ========================================================== */
+
+/* ---------- Page container ---------- */
+div:has(> h1):has(> div > h2 + p + button) {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 84px) clamp(16px, 4vw, 40px) clamp(64px, 9vw, 110px);
+}
+
+/* ---------- Title ---------- */
+div:has(> h1):has(> div > h2 + p + button) > h1 {
+  position: relative;
+  margin: 0 0 clamp(14px, 3vw, 26px);
+  padding-bottom: 22px;
+  text-align: center;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+}
+
+div:has(> h1):has(> div > h2 + p + button) > h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--pink-400);
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* ---------- Category block (card) ---------- */
+div:has(> h2 + p + button) {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "title  action"
+    "desc   action"
+    "items  items";
+  column-gap: 32px;
+  row-gap: 6px;
+  align-items: center;
+  padding: clamp(24px, 3.5vw, 36px) clamp(22px, 4vw, 40px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+/* soft pink glow in the corner */
+div:has(> h2 + p + button)::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  left: -70px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: var(--pink-50);
+  pointer-events: none;
+}
+
+div:has(> h2 + p + button):hover {
+  border-color: var(--pink-200);
+  box-shadow: var(--shadow-md);
+}
+
+/* open state: block that contains the products <div> */
+div:has(> h2 + p + button):has(> div) {
+  border-color: var(--pink-200);
+  box-shadow: var(--shadow-md);
+}
+
+div:has(> h2 + p + button) > h2 {
+  grid-area: title;
+  position: relative;
+  align-self: end;
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+div:has(> h2 + p + button) > p {
+  grid-area: desc;
+  position: relative;
+  align-self: start;
+  max-width: 560px;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+/* ---------- Toggle button ---------- */
+div:has(> h2 + p + button) > button {
+  grid-area: action;
+  position: relative;
+  padding: 13px 28px;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  box-shadow: none;
+}
+
+div:has(> h2 + p + button) > button:hover {
+  color: var(--white);
+  background: var(--ink);
+  box-shadow: var(--shadow-md);
+}
+
+/* when open ("Masquer les produits") the button is filled */
+div:has(> h2 + p + button):has(> div) > button {
+  color: var(--white);
+  background: var(--ink);
+}
+
+div:has(> h2 + p + button):has(> div) > button:hover {
+  background: var(--pink-500);
+  border-color: var(--pink-500);
+}
+
+/* ---------- Products inside an opened category ---------- */
+div:has(> h2 + p + button) > div {
+  grid-area: items;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px;
+  margin-top: 26px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+  animation: cat-reveal 0.5s var(--ease);
+}
+
+/* "Aucun produit dans cette catégorie." */
+div:has(> h2 + p + button) > div > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 26px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--ink-mute);
+  background: var(--cream);
+  border: 1px dashed var(--beige-200);
+  border-radius: var(--radius-md);
+}
+
+@keyframes cat-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 760px) {
+  div:has(> h2 + p + button) > div {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  div:has(> h2 + p + button) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "desc"
+      "action"
+      "items";
+  }
+
+  div:has(> h2 + p + button) > button {
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  div:has(> h2 + p + button) > div {
+    grid-template-columns: 1fr;
+  }
+}

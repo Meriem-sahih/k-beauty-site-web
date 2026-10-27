@@ -1,0 +1,270 @@
+/* ==========================================================
+   CART PAGE (Panier.jsx)
+
+   <div>                                  ← page (has h1 AND hr)
+     <h1>
+     <p>error / success</p>
+     <div>                                ← one per product
+       <img> <h2> <p>Prix</p>
+       <div><button>-</button><span/><button>+</button></div>
+       <p>Sous-total</p> <button>Supprimer</button>
+     </div>
+     <hr> <h2>Total</h2> <button>Confirmer</button>
+   </div>
+   ========================================================== */
+
+/* ---------- Page container ---------- */
+div:has(> h1):has(> hr) {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 84px) clamp(16px, 4vw, 40px) clamp(64px, 9vw, 110px);
+}
+
+/* ---------- Title ---------- */
+div:has(> h1):has(> hr) > h1 {
+  position: relative;
+  margin: 0 0 clamp(32px, 5vw, 48px);
+  padding-bottom: 22px;
+  text-align: center;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+}
+
+div:has(> h1):has(> hr) > h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--pink-400);
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* ---------- Error / success messages ---------- */
+div:has(> h1):has(> hr) > p {
+  margin: 0 0 20px;
+  padding: 14px 20px;
+  font-size: 0.92rem;
+  text-align: center;
+  color: var(--ink);
+  background: var(--pink-50);
+  border: 1px solid var(--pink-200);
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Cart item (card) ---------- */
+div:has(> h1):has(> hr) > div:has(> img) {
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto auto;
+  grid-template-areas:
+    "img name  qty sub remove"
+    "img price qty sub remove";
+  column-gap: 24px;
+  row-gap: 4px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 20px 24px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+div:has(> h1):has(> hr) > div:has(> img):hover {
+  border-color: var(--pink-200);
+  box-shadow: var(--shadow-md);
+}
+
+/* Image */
+div:has(> h1):has(> hr) > div:has(> img) > img {
+  grid-area: img;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--beige-50), var(--pink-50));
+  border-radius: var(--radius-sm);
+}
+
+/* Name */
+div:has(> h1):has(> hr) > div:has(> img) > h2 {
+  grid-area: name;
+  align-self: end;
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.25;
+}
+
+/* Unit price (1st <p>) */
+div:has(> h1):has(> hr) > div:has(> img) > p:nth-of-type(1) {
+  grid-area: price;
+  align-self: start;
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-mute);
+}
+
+/* Sub-total (2nd <p>) */
+div:has(> h1):has(> hr) > div:has(> img) > p:nth-of-type(2) {
+  grid-area: sub;
+  margin: 0;
+  min-width: 120px;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--pink-500);
+}
+
+/* ---------- Quantity stepper ---------- */
+div:has(> h1):has(> hr) > div:has(> img) > div {
+  grid-area: qty;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--cream);
+  border: 1px solid var(--beige-200);
+  border-radius: var(--radius-pill);
+}
+
+div:has(> h1):has(> hr) > div:has(> img) > div > span {
+  min-width: 34px;
+  text-align: center;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+div:has(> h1):has(> hr) > div:has(> img) > div > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--beige-200);
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+div:has(> h1):has(> hr) > div:has(> img) > div > button:hover:not(:disabled) {
+  color: var(--white);
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------- Remove button (quiet text link) ---------- */
+div:has(> h1):has(> hr) > div:has(> img) > button {
+  grid-area: remove;
+  padding: 6px 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+div:has(> h1):has(> hr) > div:has(> img) > button:hover:not(:disabled) {
+  color: var(--pink-500);
+  background: transparent;
+  border-bottom-color: var(--pink-400);
+  transform: none;
+  box-shadow: none;
+}
+
+div:has(> h1):has(> hr) > div:has(> img) button:disabled {
+  opacity: 0.45;
+}
+
+/* ---------- Summary: divider, total, confirm ---------- */
+div:has(> h1):has(> hr) > hr {
+  height: 0;
+  margin: 36px 0 0;
+  border: 0;
+  border-top: 1px solid var(--beige-200);
+}
+
+div:has(> h1):has(> hr) > h2 {
+  margin: 28px 0 24px;
+  text-align: right;
+  font-size: clamp(1.7rem, 3.5vw, 2.2rem);
+  font-weight: 600;
+}
+
+div:has(> h1):has(> hr) > button {
+  display: block;
+  min-width: 300px;
+  margin-left: auto;
+  padding: 17px 40px;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--white);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  box-shadow: var(--shadow-md);
+}
+
+div:has(> h1):has(> hr) > button:hover:not(:disabled) {
+  background: var(--pink-500);
+  border-color: var(--pink-500);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 820px) {
+  div:has(> h1):has(> hr) > div:has(> img) {
+    column-gap: 16px;
+    padding: 18px;
+  }
+
+  div:has(> h1):has(> hr) > div:has(> img) > p:nth-of-type(2) {
+    min-width: 0;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  div:has(> h1):has(> hr) > div:has(> img) {
+    grid-template-columns: 80px 1fr auto;
+    grid-template-areas:
+      "img name  remove"
+      "img price price"
+      "qty qty   sub";
+    row-gap: 6px;
+    column-gap: 14px;
+    padding: 16px;
+  }
+
+  div:has(> h1):has(> hr) > div:has(> img) > h2 {
+    font-size: 1.12rem;
+  }
+
+  div:has(> h1):has(> hr) > div:has(> img) > div {
+    margin-top: 10px;
+    justify-self: start;
+  }
+
+  div:has(> h1):has(> hr) > div:has(> img) > p:nth-of-type(2) {
+    margin-top: 10px;
+    font-size: 1.1rem;
+  }
+
+  div:has(> h1):has(> hr) > button {
+    width: 100%;
+    min-width: 0;
+  }
+}

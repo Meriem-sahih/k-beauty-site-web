@@ -1,0 +1,246 @@
+/* ==========================================================
+   MY ORDERS PAGE (MesCommandes.jsx)
+
+   <div>                                     ← page
+     <h1>
+     <div> <p/> <a/> </div>                  ← empty state
+     or, per order:
+     <div>                                   ← order card
+       <hr> <h2>Commande n°</h2> <p>Date</p> <p>Statut</p>
+       <h3>Produits commandés</h3>
+       <div><p>Nom — Quantité</p><p>Prix unitaire</p></div> …
+       <h3>Total</h3>
+     </div>
+   </div>
+   ========================================================== */
+
+/* ---------- Page container ---------- */
+div:has(> h1):has(> div > hr + h2 + p),
+div:has(> h1):has(> div:only-of-type > p:first-child + a:last-child) {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 84px) clamp(16px, 4vw, 40px) clamp(64px, 9vw, 110px);
+}
+
+/* ---------- Title ---------- */
+div:has(> h1):has(> div > hr + h2 + p) > h1,
+div:has(> h1):has(> div:only-of-type > p:first-child + a:last-child) > h1 {
+  position: relative;
+  margin: 0 0 clamp(14px, 3vw, 26px);
+  padding-bottom: 22px;
+  text-align: center;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+}
+
+div:has(> h1):has(> div > hr + h2 + p) > h1::after,
+div:has(> h1):has(> div:only-of-type > p:first-child + a:last-child) > h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--pink-400);
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* ---------- Order card ---------- */
+div:has(> hr + h2 + p + p + h3) {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 20px;
+  row-gap: 8px;
+  align-items: center;
+  padding: clamp(24px, 3.5vw, 36px) clamp(20px, 4vw, 40px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+div:has(> hr + h2 + p + p + h3):hover {
+  border-color: var(--pink-200);
+  box-shadow: var(--shadow-md);
+}
+
+/* soft glow in the corner */
+div:has(> hr + h2 + p + p + h3)::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: var(--pink-50);
+  pointer-events: none;
+}
+
+div:has(> hr + h2 + p + p + h3) > * {
+  position: relative;
+  grid-column: 1 / -1;
+}
+
+/* The <hr> is replaced by the card border */
+div:has(> hr + h2 + p + p + h3) > hr {
+  display: none;
+}
+
+/* Order number (left, row 1) */
+div:has(> hr + h2 + p + p + h3) > h2 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+}
+
+/* Status pill (right, row 1) = 2nd direct <p> */
+div:has(> hr + h2 + p + p + h3) > p:nth-of-type(2) {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 6px 16px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--pink-100);
+  border: 1px solid var(--pink-200);
+  border-radius: var(--radius-pill);
+}
+
+/* Date (row 2) = 1st direct <p> */
+div:has(> hr + h2 + p + p + h3) > p:nth-of-type(1) {
+  grid-row: 2;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-mute);
+}
+
+/* "Produits commandés" label */
+div:has(> hr + h2 + p + p + h3) > h3:nth-of-type(1) {
+  margin: 22px 0 6px;
+  padding-top: 22px;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Ordered items ---------- */
+div:has(> hr + h2 + p + p + h3) > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 20px;
+  padding: 14px 18px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+div:has(> hr + h2 + p + p + h3) > div > p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+div:has(> hr + h2 + p + p + h3) > div > p:last-child {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Order total ---------- */
+div:has(> hr + h2 + p + p + h3) > h3:last-of-type {
+  margin: 16px 0 0;
+  padding-top: 20px;
+  text-align: right;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-weight: 600;
+  color: var(--pink-500);
+  border-top: 1px solid var(--beige-200);
+}
+
+/* ---------- Empty state ---------- */
+div:has(> h1) > div:has(> p:first-child + a:last-child) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(40px, 7vw, 72px) 24px;
+  text-align: center;
+  background: var(--white);
+  border: 1px dashed var(--beige-200);
+  border-radius: var(--radius-lg);
+}
+
+div:has(> h1) > div:has(> p:first-child + a:last-child) > p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  color: var(--ink-soft);
+}
+
+div:has(> h1) > div:has(> p:first-child + a:last-child) > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 36px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--ink);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.35s var(--ease);
+}
+
+div:has(> h1) > div:has(> p:first-child + a:last-child) > a:hover {
+  background: var(--pink-500);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 560px) {
+  div:has(> hr + h2 + p + p + h3) {
+    grid-template-columns: 1fr;
+  }
+
+  div:has(> hr + h2 + p + p + h3) > h2,
+  div:has(> hr + h2 + p + p + h3) > p:nth-of-type(2),
+  div:has(> hr + h2 + p + p + h3) > p:nth-of-type(1) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  div:has(> hr + h2 + p + p + h3) > p:nth-of-type(2) {
+    justify-self: start;
+    margin-top: 4px;
+  }
+
+  div:has(> hr + h2 + p + p + h3) > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  div:has(> h1) > div:has(> p:first-child + a:last-child) > a {
+    width: 100%;
+  }
+}
